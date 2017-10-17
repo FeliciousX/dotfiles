@@ -39,3 +39,4 @@ Thumbs.db
 # Tern #
 ########
 .tern-port
+.tern-project
