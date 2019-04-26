@@ -1,6 +1,3 @@
-# Allow vi mode in shell
-bindkey -v
-
 ## Referenced from http://qr.ae/3t77J ##
 # Easily extract all compressed file types
 extract () {
