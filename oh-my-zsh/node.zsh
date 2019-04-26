@@ -1,3 +1,4 @@
+# using nodejs-n package or github: tj/n to manage nodejs
 export N_PREFIX="$HOME/.nodejs-n"
 PATH="$PATH:$N_PREFIX/bin"
 
