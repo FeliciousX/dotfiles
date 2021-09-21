@@ -84,6 +84,7 @@ plugins=(wd git gcloud history-substring-search)
 # else
 #   export EDITOR='mvim'
 # fi
+export EDITOR={{ .editor }}
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -96,6 +97,15 @@ plugins=(wd git gcloud history-substring-search)
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias fs="fd -tf 2> /dev/null | fzy | xclip -i"
+{{ if lookPath "exa" }}
+alias ls=exa
+alias tree="exa -T"
+{{ end }}
+
+{{ if lookPath "bat" }}
+alias cat=bat
+{{ end }}
 
 ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
@@ -144,7 +154,6 @@ function next() {
   esac
 }
 
-alias fs="fd -tf 2> /dev/null | fzy | xclip -i"
 function v() {
     if [[ $1 == "" ]]
     then
@@ -161,11 +170,6 @@ function v() {
 }
 
 export SKIM_DEFAULT_COMMAND="fd --type f"
-export EDITOR={{ .editor }}
-
-alias ls=exa
-alias tree="exa -T"
-alias cat=bat
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/path.zsh.inc' ]; then . '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/path.zsh.inc'; fi
