@@ -1,0 +1,9 @@
+[language.javascript]
+filetypes = ["javascript"]
+roots = ["package.json"]
+command = "language-server-stdio"
+
+[language.typescript]
+filetypes = ["typescript"]
+roots = ["package.json", "tsconfig.json"]
+command = "javascript-typescript-stdio"

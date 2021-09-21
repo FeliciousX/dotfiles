@@ -1,0 +1,161 @@
+# Preamble ─────────────────────────────────────────────────────────────────────
+
+try %sh{
+  kcr init kakoune
+  kak-lsp --kakoune --session "$kak_session"
+}
+
+try lsp-enable
+
+# Plugins ──────────────────────────────────────────────────────────────────────
+evaluate-commands %sh{
+  plugins="$kak_config/plugins"
+  mkdir -p "$plugins"
+  [ ! -e "$plugins/plug.kak" ] && \
+    git clone -q https://github.com/andreyorst/plug.kak.git "$plugins/plug.kak"
+  printf "%s\n" "source '$plugins/plug.kak/rc/plug.kak'"
+}
+
+plug "andreyorst/plug.kak" noload
+
+plug "lePerdu/kakboard" config %{
+  hook global WinCreate .* %{ kakboard-enable }
+}
+
+plug "andreyorst/fzf.kak" config %{
+  require-module fzf
+  require-module fzf-buffer
+  require-module fzf-ctags
+  require-module fzf-git
+  require-module fzf-vcs
+  require-module fzf-grep
+  require-module fzf-sk-grep
+  require-module fzf-project
+  require-module fzf-file
+  set-option global fzf_highlight_command 'bat' # 'coderay'|'highlight'|'rouge | chroma'
+  set-option global fzf_file_command 'rg' # 'ag'|'fd'|'find'
+  set-option global fzf_sk_grep_command "rg -niL"
+  set-option global fzf_use_main_selection false
+  map -docstring 'fzf mode' global user f  ':fzf-mode<ret>'
+  map -docstring 'file picker' global normal <c-p> ':fzf-mode<ret>f<ret>'
+  map -docstring 'buffer picker' global normal <c-b> ':fzf-mode<ret>b<ret>'
+  map -docstring 'grep picker' global normal <c-g> ':fzf-mode<ret><a-g><ret>'
+}
+
+plug "andreyorst/kaktree" config %{
+  hook global WinSetOption filetype=kaktree %{
+   remove-highlighter buffer/numbers
+   remove-highlighter buffer/matching
+   remove-highlighter buffer/wrap
+   remove-highlighter buffer/show-whitespaces
+  }
+  kaktree-enable
+
+  map -docstring 'kaktree' global user n ':kaktree-toggle<ret>'
+}
+
+plug 'jjk96/kakoune-rainbow' %{
+  set-option global rainbow_faces red green yellow blue magenta cyan
+}
+
+# Options ──────────────────────────────────────────────────────────────────────
+
+# UI options
+set-option global startup_info_version 20211231
+set-option global ui_options terminal_assistant=none
+delete-scratch-message
+
+# Color scheme
+# Dracula – https://draculatheme.com/kakoune
+colorscheme dracula-transparent
+#colorscheme mygruvbox
+
+# Status line
+add-cursor-character-unicode-expansion
+set-option global modelinefmt '%val{bufname} %val{cursor_line}:%val{cursor_char_column} {{context_info}} {{mode_info}} - U+%opt{cursor_character_unicode} - %val{client}@%val{session}'
+
+# Indentation
+set-indent global 2
+enable-detect-indent
+enable-auto-indent
+
+# Auto-pairing of characters
+# enable-auto-pairs
+
+# Disable indentation hooks
+set-option global disabled_hooks '(?!auto)(?!detect)\K(.+)-(trim-indent|insert|indent)'
+
+# Highlighters
+add-highlighter -override global/number-lines number-lines -relative
+add-highlighter -override global/show-matching show-matching
+
+# Show selections
+show-selected-text
+
+# Show whitespaces
+add-highlighter -override global/show-whitespaces show-whitespaces
+add-highlighter -override global/show-trailing-whitespaces regex '\h+$' '0:red+f'
+add-highlighter -override global/show-non-breaking-spaces regex ' +' '0:red+f'
+
+# Show characters
+add-highlighter -override global/show-unicode-2013 regex '–' '0:green+f'
+add-highlighter -override global/show-unicode-2014 regex '—' '0:green+bf'
+add-highlighter -override global/show-math-symbols regex '[−×]' '0:cyan+f'
+add-highlighter -override global/show-limit regex '(?S)^.{79}[=-─┈]\K\n' '0:green+f'
+
+# Clipboard
+synchronize-clipboard
+synchronize-buffer-directory-name-with-register d
+
+# Tools
+set-option global makecmd 'make -j 8'
+set-option global grepcmd 'rg --column'
+
+# Windowing
+alacritty-integration-enable
+
+# Mappings ─────────────────────────────────────────────────────────────────────
+
+# Normal mode ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+
+# Hot reloading
+map -docstring 'reload kakrc' global normal <F5> ':source-kakrc; echo reloaded kakrc<ret>'
+
+# Editing
+map -docstring 'save' global normal <c-s> ':write; echo saved<ret>'
+map -docstring 'close buffer' global normal <c-w> ':delete-buffer<ret>'
+
+# Search
+map -docstring 'find' global normal / /(?i) # case-insensitive by default
+map -docstring 'search' global normal f ':search<ret>'
+map -docstring 'jump backward' global normal F <c-o>
+
+# Selection primitives
+map -docstring 'select all occurrences of current selection' global normal <a-percent> ':select-highlights<ret>'
+map -docstring 'surround' global user s ':surround<ret>'
+
+# Tools
+map -docstring 'math' global normal = ':math<ret>'
+
+# Windowing
+map -docstring 'new client' global normal <c-t> ':new<ret>'
+map -docstring 'terminal' global normal <c-n> ':connect-terminal<ret>'
+map -docstring 'file explorer' global normal <c-e> ':$ nautilus .<ret>'
+
+# Insert mode ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+map -docstring 'indent' global insert <tab> '<a-;><a-gt>'
+map -docstring 'unindent' global insert <s-tab> '<a-;><a-lt>'
+
+# View mode ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+
+# Filetype┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+
+# Vue
+hook global BufCreate .*\.vue %{
+  set buffer filetype html
+}
+
+# JSON
+hook global BufSetOption filetype=json %{
+  set-option buffer formatcmd "jq --indent %opt{tabstop} ."
+}
