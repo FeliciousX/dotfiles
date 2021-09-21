@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-ZSH="/home/fx/.oh-my-zsh"
+ZSH="{{ .chezmoi.homeDir }}/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -168,9 +168,9 @@ alias tree="exa -T"
 alias cat=bat
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/fx/workspaces/google-cloud-sdk/src/path.zsh.inc' ]; then . '/home/fx/workspaces/google-cloud-sdk/src/path.zsh.inc'; fi
+if [ -f '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/path.zsh.inc' ]; then . '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/fx/workspaces/google-cloud-sdk/src/completion.zsh.inc' ]; then . '/home/fx/workspaces/google-cloud-sdk/src/completion.zsh.inc'; fi
+if [ -f '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/completion.zsh.inc' ]; then . '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/completion.zsh.inc'; fi
 
-source /home/fx/.config/broot/launcher/bash/br
+source {{ .chezmoi.homeDir }}/.config/broot/launcher/bash/br
