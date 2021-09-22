@@ -1,2 +1,4 @@
 editor = "kak"
-workspaceDir = "workspace"
+workspaceDir = "$HOME/workspace"
+omzDir = "$HOME/.oh-my-zsh"
+omzCustom = "$HOME/workspace/config/oh-my-zsh"

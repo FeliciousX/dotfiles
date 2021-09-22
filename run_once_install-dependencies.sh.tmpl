@@ -1,16 +1,19 @@
 #!/bin/sh
 sudo pacman -S --needed base-devel
-git clone https://aur.archlinux.org/yay.git {{ .chezmoi.homeDir }}/{{ .workspaceDir }}/aur/yay
-cd {{ .chezmoi.homeDir }}/{{ .workspaceDir }}/aur/yay
+
+# install yay
+git clone https://aur.archlinux.org/yay.git {{ .workspaceDir }}/aur/yay
+cd {{ .workspaceDir }}/aur/yay
 makepkg -si
 
-# install packages
-yay -S \
-  fzy \
-  xclip \
-  fd \
-  exa \
+# install dependencies
+yay -S --needed \
+  alacritty \
   bat \
-  fortune-mod \
   cowsay \
-  rust-lolcat-git
+  exa \
+  fd \
+  fortune-mod \
+  fzy \
+  rust-lolcat-git \
+  xclip
