@@ -105,14 +105,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias fs="fd -tf 2> /dev/null | fzy | xclip -i"
-{{ if lookPath "exa" }}
 alias ls=exa
 alias tree="exa -T"
-{{ end }}
-
-{{ if lookPath "bat" }}
 alias cat=bat
-{{ end }}
 
 function pikto() {
   if [[ $(docker-compose top) == "" ]]; then
