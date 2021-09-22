@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# install tpm
+git clone https://github.com/tmux-plugins/tpm.git {{ .tmuxPluginDir }}/tpm
+
+# install tmux plugins
+{{ .tmuxPluginDir }}/tpm/bin/install_plugins
