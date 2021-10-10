@@ -166,10 +166,10 @@ function v() {
 
 export SKIM_DEFAULT_COMMAND="fd --type f"
 
+source {{ .chezmoi.homeDir }}/.config/broot/launcher/bash/br
+
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/path.zsh.inc' ]; then . '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/path.zsh.inc'; fi
+if [ -f '{{ .chezmoi.homeDir }}/opts/google-cloud-sdk/path.zsh.inc' ]; then . '{{ .chezmoi.homeDir }}/opts/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/completion.zsh.inc' ]; then . '{{ .chezmoi.homeDir }}/workspaces/google-cloud-sdk/src/completion.zsh.inc'; fi
-
-source {{ .chezmoi.homeDir }}/.config/broot/launcher/bash/br
+if [ -f '{{ .chezmoi.homeDir }}/opts/google-cloud-sdk/completion.zsh.inc' ]; then . '{{ .chezmoi.homeDir }}/opts/google-cloud-sdk/completion.zsh.inc'; fi
