@@ -109,46 +109,6 @@ alias ls=exa
 alias tree="exa -T"
 alias cat=bat
 
-function pikto() {
-  if [[ $(docker-compose top) == "" ]]; then
-    docker-compose start
-  fi
-
-  case $1 in
-    dev)
-      docker-compose exec pikto bash -c "npm run start -- --host=0.0.0.0";;
-    serve)
-      docker-compose exec pikto bash -c "puma -b tcp://0.0.0.0 -p 3000";;
-    sidekiq)
-      docker-compose exec pikto bash -c "sidekiq -e development";;
-    console)
-      docker-compose exec pikto bash -c "rails console";;
-    console-test)
-      docker-compose exec pikto bash -c "RAILS_ENV=test rails console";;
-    "")
-      docker-compose exec pikto bash;;
-    *)
-      command="$@"
-      docker-compose exec pikto bash -c "$command";;
-  esac
-}
-
-function next() {
-  if [[ $(docker-compose top) == "" ]]; then
-    docker-compose start
-  fi
-
-  case $1 in
-    dev)
-      docker-compose exec client bash -c "npm run serve";;
-    "")
-      docker-compose exec client bash;;
-    *)
-      command="$@"
-      docker-compose exec client bash -c "$command";;
-  esac
-}
-
 function v() {
     if [[ $1 == "" ]]
     then
