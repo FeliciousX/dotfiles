@@ -3,14 +3,13 @@
 [user]
 	email = {{ .email }}
 	name = {{ .name }}
-	signingkey = {{ .signingkey }}
 [core]
 	editor = {{ .editor }}
 [alias]
-  pushf = push --force-with-lease
+	pushf = push --force-with-lease
 [push]
 	default = upstream
 [init]
 	defaultBranch = main
-[includeif "gitdir:~/workspace/pikto/"]
-	path = ~/workspace/pikto/.gitconfig
+[includeif "gitdir:~/workspace/valetservice/"]
+	path = ~/workspace/valetservice/.gitconfig
