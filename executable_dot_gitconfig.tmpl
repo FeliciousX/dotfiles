@@ -7,6 +7,7 @@
 	editor = {{ .editor }}
 [alias]
 	pushf = push --force-with-lease
+	wip = commit --no-verify --no-gpg-sign -m \"--wip-- [skip ci]\"
 [push]
 	default = upstream
 [init]
