@@ -1,5 +1,3 @@
 editor = "kak"
-workspaceDir = "~/workspace"
-omzDir = "$HOME/.oh-my-zsh"
-omzCustom = "$HOME/workspace/config/oh-my-zsh"
+workspaceDir = "~/workspaces"
 tmuxPluginDir = "~/.tmux/plugins"
