@@ -3,8 +3,8 @@ if status is-interactive
 end
 # set up path before everything else
 # fish_add_path ~/.local/bin
-# fish_add_path ~/.npm-global/bin
 # fish_add_path ~/.cargo/bin
+fish_add_path ~/.npm-global/bin
 
 # environment
 set -gx EDITOR vi
@@ -23,6 +23,7 @@ end
 
 ## git
 if type -q git
+  abbr ga git add
   abbr gf git fetch -p
   abbr gc git commit -v
   abbr gb git branch
