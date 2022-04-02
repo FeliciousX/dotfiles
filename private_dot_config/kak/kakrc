@@ -15,52 +15,35 @@ evaluate-commands %sh{
 
 plug "andreyorst/plug.kak" noload
 
+# Dracula theme for Kakoune
+# https://draculatheme.com/kakoune
+plug "dracula/kakoune" theme ensure
+
 plug "kak-lsp/kak-lsp" do %{
-    cargo build --release --locked
-    cargo install --force --path .
+  cargo build --release --locked
+  cargo install --force --path .
 } config %{
+  # uncomment to enable debugging
+  #eval %sh{echo ${kak_opt_lsp_cmd} >> /tmp/kak-lsp.log}
+  #set global lsp_cmd "kak-lsp -s %val{session} -vvv --log /tmp/kak-lsp.log"
 
-    # uncomment to enable debugging
-    # eval %sh{echo ${kak_opt_lsp_cmd} >> /tmp/kak-lsp.log}
-    # set global lsp_cmd "kak-lsp -s %val{session} -vvv --log /tmp/kak-lsp.log"
+  set global lsp_diagnostic_line_error_sign '║'
+  set global lsp_diagnostic_line_warning_sign '┊'
 
-    # this is not necessary; the `lsp-enable-window` will take care of it
-    # eval %sh{${kak_opt_lsp_cmd} --kakoune -s $kak_session}
+  define-command ne -docstring 'go to next error/warning from lsp' %{ lsp-find-error --include-warnings }
+  define-command pe -docstring 'go to previous error/warning from lsp' %{ lsp-find-error --previous --include-warnings }
+  define-command ee -docstring 'go to current error/warning from lsp' %{ lsp-find-error --include-warnings; lsp-find-error --previous --include-warnings }
 
-    set global lsp_diagnostic_line_error_sign '║'
-    set global lsp_diagnostic_line_warning_sign '┊'
+  define-command lsp-restart -docstring 'restart lsp server' %{ lsp-stop; lsp-start }
+  hook global WinSetOption filetype=(javascript|typescript) %{
+    set-option window lsp_auto_highlight_references true
+    set-option window lsp_hover_anchor false
+    lsp-auto-hover-enable
+    echo -debug "Enabling LSP for filetype %opt{filetype}"
+    lsp-enable-window
+  }
 
-    define-command ne -docstring 'go to next error/warning from lsp' %{ lsp-find-error --include-warnings }
-    define-command pe -docstring 'go to previous error/warning from lsp' %{ lsp-find-error --previous --include-warnings }
-    define-command ee -docstring 'go to current error/warning from lsp' %{ lsp-find-error --include-warnings; lsp-find-error --previous --include-warnings }
-
-    define-command lsp-restart -docstring 'restart lsp server' %{ lsp-stop; lsp-start }
-    hook global WinSetOption filetype=(c|cpp|cc|rust|javascript|typescript) %{
-        set-option window lsp_auto_highlight_references true
-        set-option window lsp_hover_anchor false
-        lsp-auto-hover-enable
-        echo -debug "Enabling LSP for filtetype %opt{filetype}"
-        lsp-enable-window
-    }
-
-    hook global WinSetOption filetype=(rust) %{
-        set window lsp_server_configuration rust.clippy_preference="on"
-    }
-
-    hook global WinSetOption filetype=rust %{
-        hook window BufWritePre .* %{
-            evaluate-commands %sh{
-                test -f rustfmt.toml && printf lsp-formatting-sync
-            }
-        }
-    }
-
-    hook global KakEnd .* lsp-exit
-}
-
-# Color scheme
-plug "dracula/kakoune" theme config %{
-    colorscheme dracula
+  hook global KakEnd .* lsp-exit
 }
 
 plug "lePerdu/kakboard" config %{
@@ -74,12 +57,10 @@ plug "andreyorst/fzf.kak" config %{
   require-module fzf-git
   require-module fzf-vcs
   require-module fzf-grep
-  require-module fzf-sk-grep
   require-module fzf-project
   require-module fzf-file
   set-option global fzf_highlight_command 'bat' # 'coderay'|'highlight'|'rouge | chroma'
   set-option global fzf_file_command 'rg' # 'ag'|'fd'|'find'
-  set-option global fzf_sk_grep_command "rg -niL"
   set-option global fzf_use_main_selection false
   map -docstring 'fzf mode' global user f  ':fzf-mode<ret>'
   map -docstring 'file picker' global normal <c-p> ':fzf-mode<ret>f<ret>'
@@ -107,8 +88,13 @@ plug 'jjk96/kakoune-rainbow' %{
 
 # Indentation
 set-option global indentwidth 2
-#enable-detect-indent
-#enable-auto-indent
+
+# UI options
+set-option global startup_info_version 20220328
+set-option global ui_options terminal_assistant=none
+
+# Status line
+set-option global modelinefmt '%val{bufname} %val{cursor_line}:%val{cursor_char_column} {{context_info}} {{mode_info}} - %val{client}@%val{session}'
 
 # Disable indentation hooks
 set-option global disabled_hooks '(?!auto)(?!detect)\K(.+)-(trim-indent|insert|indent)'
@@ -133,16 +119,13 @@ set-option global makecmd 'make -j 8'
 set-option global grepcmd 'rg --column'
 
 # Windowing
-# TODO: figure out tmux integration instead
-#alacritty-integration-enable
 
 # Mappings ─────────────────────────────────────────────────────────────────────
 
 # Normal mode ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 
 # Hot reloading
-# TODO: define source-kakrc
-#map -docstring 'reload kakrc' global normal <F5> ':source-kakrc; echo reloaded kakrc<ret>'
+map -docstring 'reload kakrc' global normal <F5> ':source-kakrc; echo reloaded kakrc<ret>'
 
 # Editing
 map -docstring 'save' global normal <c-s> ':write; echo saved<ret>'
@@ -150,21 +133,20 @@ map -docstring 'close buffer' global normal <c-w> ':delete-buffer<ret>'
 
 # Search
 map -docstring 'find' global normal / /(?i) # case-insensitive by default
-# TODO: define search?
-#map -docstring 'search' global normal f ':search<ret>'
+map -docstring 'search' global normal f ':search<ret>'
 map -docstring 'jump backward' global normal F <c-o>
 
 # Selection primitives
-#map -docstring 'select all occurrences of current selection' global normal <a-percent> ':select-highlights<ret>'
-#map -docstring 'surround' global user s ':surround<ret>'
+map -docstring 'select all occurrences of current selection' global normal <a-percent> ':select-highlights<ret>'
+map -docstring 'surround' global user s ':surround<ret>'
 
 # Tools
-#map -docstring 'math' global normal = ':math<ret>'
+map -docstring 'math' global normal = ':math<ret>'
 
 # Windowing
 map -docstring 'new client' global normal <c-t> ':new<ret>'
-map -docstring 'terminal' global normal <c-n> ':connect terminal<ret>'
-#map -docstring 'file explorer' global normal <c-e> ':$ nautilus .<ret>'
+map -docstring 'terminal' global normal <c-n> ':connect-terminal<ret>'
+map -docstring 'file explorer' global normal <c-e> ':$ nautilus .<ret>'
 
 # Insert mode ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 map -docstring 'indent' global insert <tab> '<a-;><a-gt>'
