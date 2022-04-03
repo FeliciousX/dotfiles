@@ -32,6 +32,7 @@ if type -q git
   abbr gds git diff --staged
   abbr gm git merge
   abbr gst git status
+  abbr gsw git switch
   abbr gco git checkout
   abbr grb git rebase
   abbr grba git rebase --abort
