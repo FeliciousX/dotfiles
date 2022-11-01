@@ -1,0 +1,9 @@
+[[language]]
+name = "typescript"
+auto-format = true
+language-server = { command = "typescript-language-server", args = ["--stdio"] }
+
+[[language]]
+name = "tsx"
+auto-format = true
+language-server = { command = "typescript-language-server", args = ["--stdio"] }
