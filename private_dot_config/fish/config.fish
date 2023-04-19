@@ -33,11 +33,15 @@ if type -q git
   abbr gm git merge
   abbr gst git status
   abbr gsw git switch
+  abbr gswc git switch -c
+  abbr gswd git switch -d
   abbr gco git checkout
   abbr grb git rebase
   abbr grba git rebase --abort
   abbr grbc git rebase --continue
   abbr grbi git rebase --interactive
+  abbr grs git reset
+  abbr grsh git reset --hard
   abbr gcp git cherry-pick
   abbr gcpa git cherry-pick --abort
   abbr gcpc git cherry-pick --continue
@@ -190,3 +194,20 @@ if type -q kcr
   abbr :g 'kcr fzf grep'
   abbr g: 'KK kcr fzf grep'
 end
+
+function zenudiff
+  git diff --name-only --diff-filter=ACMR origin/release \
+    'config/**.cf*' \
+    'controllers/**.cf*' \
+    'events/**.cf*' \
+    'global/**.cf*' \
+    'helpers/**.cf*' \
+    'migrator/templates/**.cf*' \
+    'migrator/migrations/**.cf*' \
+    'migrator/Migrate.cfc' \
+    'models/**.cfc' \
+    'services/**.cfc' \
+    'tests/**.cfc' | tr '\n' ','
+end
+
+abbr zenucompose docker compose -f docker-compose.yml -f docker-compose.zenu.yml

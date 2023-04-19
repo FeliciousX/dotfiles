@@ -2,16 +2,21 @@
 {{- if not $email -}}
 {{-   $email = promptString "email" -}}
 {{- end -}}
-{{- $name := get . "name" -}}
 {{- $signingkey := get . "signingkey" -}}
+{{- if not $signingkey -}}
+{{-   $signingkey = promptString "signing key" -}}
+{{- end -}}
+{{- $name := get . "name" -}}
 {{- if not $name -}}
 {{-   $name = promptString "name" -}}
+{{- end -}}
+{{- $editor:= get . "editor" -}}
+{{- if not $editor -}}
+{{-   $editor = promptString "editor" -}}
 {{- end -}}
 
 [data]
   email = {{ $email | quote }}
   name = {{ $name | quote }}
-
-[merge]
-  command = "nvim"
-  args = ["-d", "{{ .Destination }}", "{{ .Source }}", "{{ .Target }}"]
+  signingkey = {{ $signingkey | quote }}
+  editor = {{ $editor | quote }}

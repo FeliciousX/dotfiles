@@ -3,6 +3,7 @@
 [user]
 	email = {{ .email }}
 	name = {{ .name }}
+	signingkey = {{ .signingkey }}
 [core]
 	editor = {{ .editor }}
 	pager = delta
@@ -26,3 +27,7 @@
 	defaultBranch = main
 [includeif "gitdir:~/workspaces/valetservice/"]
 	path = ~/workspaces/valetservice/.gitconfig
+[credential]
+	helper = /usr/lib/git-core/git-credential-libsecret
+[commit]
+	gpgSign = true

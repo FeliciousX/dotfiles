@@ -1,3 +1,2 @@
-editor = "helix"
 workspaceDir = "~/workspaces"
 tmuxPluginDir = "~/.tmux/plugins"
