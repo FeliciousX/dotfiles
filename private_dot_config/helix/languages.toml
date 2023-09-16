@@ -24,4 +24,7 @@ file-types = ["cfc"]
 
 [[language]]
 name = "python"
-indent = { tab-width = 4 }
+scope = "source.python"
+indent = { tab-width = 4, unit = " " }
+language-server = { command = "ruff-lsp" }
+config = { settings = { args = [] } }
