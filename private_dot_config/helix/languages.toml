@@ -26,5 +26,5 @@ file-types = ["cfc"]
 name = "python"
 scope = "source.python"
 indent = { tab-width = 4, unit = " " }
-language-server = { command = "ruff-lsp" }
+formatter = { command = "black", args = ["-", "--line-length=88",] }
 config = { settings = { args = [] } }
