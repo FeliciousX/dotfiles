@@ -21,3 +21,7 @@ file-types = ["cfm"]
 name = "java"
 indent = { tab-width = 2, unit = " " }
 file-types = ["cfc"]
+
+[[language]]
+name = "python"
+indent = { tab-width = 4 }
