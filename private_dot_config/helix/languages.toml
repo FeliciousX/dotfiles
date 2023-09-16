@@ -27,4 +27,4 @@ name = "python"
 scope = "source.python"
 indent = { tab-width = 4, unit = " " }
 formatter = { command = "black", args = ["-", "--line-length=88",] }
-config = { settings = { args = [] } }
+auto-format = true
