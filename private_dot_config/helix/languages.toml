@@ -7,3 +7,17 @@ language-server = { command = "typescript-language-server", args = ["--stdio"] }
 name = "tsx"
 auto-format = true
 language-server = { command = "typescript-language-server", args = ["--stdio"] }
+
+[[language]]
+name = "go"
+indent = { tab-width = 2, unit = " " }
+auto-format = true
+
+[[language]]
+name = "erb"
+file-types = ["cfm"]
+
+[[language]]
+name = "java"
+indent = { tab-width = 2, unit = " " }
+file-types = ["cfc"]
