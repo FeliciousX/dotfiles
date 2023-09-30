@@ -7,7 +7,7 @@ fish_add_path ~/.local/bin
 fish_add_path ~/.npm-global/bin
 
 # environment
-set -gx EDITOR vi
+set -gx EDITOR helix
 
 # aliases
 abbr l ls
@@ -77,12 +77,6 @@ abbr wanip6 'dig @resolver1.ipv6-sandbox.opendns.com AAAA myip.opendns.com +shor
 ## $ set -Ux CLOUDSDK_HOME ...
 if set -q CLOUDSDK_HOME && test -d $CLOUDSDK_HOME
   source "$CLOUDSDK_HOME/path.fish.inc"
-end
-
-## alias vim to kakoune
-if type -q kak
-  set -gx EDITOR kak
-  abbr vim kak
 end
 
 ## set up xdg-open alias
