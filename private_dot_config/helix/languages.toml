@@ -15,11 +15,12 @@ auto-format = true
 
 [[language]]
 name = "erb"
+indent = { tab-width = 2, unit = "\t" }
 file-types = ["cfm"]
 
 [[language]]
 name = "java"
-indent = { tab-width = 2, unit = " " }
+indent = { tab-width = 2, unit = "\t" }
 file-types = ["cfc"]
 
 [[language]]

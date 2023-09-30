@@ -1,7 +1,9 @@
 theme = "dracula_transparent"
 
 [editor]
+mouse = false
 line-number = "relative"
+bufferline = "multiple"
 
 [editor.cursor-shape]
 insert = 'bar'
@@ -14,6 +16,9 @@ characters = { newline = '¬' }
 
 [editor.file-picker]
 hidden = false
+
+[keys.normal]
+esc = ["collapse_selection", "keep_primary_selection"]
 
 [keys.insert.j]
 k = "normal_mode"
